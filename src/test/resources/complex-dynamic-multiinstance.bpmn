@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1sz9dab" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <bpmn:process id="ComplexDynamicMultiinstance" name="Complex dynamic multiinstance" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Dynamic Multi instance example wanted">
+      <bpmn:outgoing>Flow_0rp959q</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0rp959q" sourceRef="StartEvent_1" targetRef="Activity_14dcv4a" />
+    <bpmn:scriptTask id="Activity_14dcv4a" name="Set documentList and allowedTypes">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=[{&#34;id&#34;: &#34;123&#34;, &#34;type&#34;: &#34;allowed&#34;}, {&#34;id&#34;: &#34;234&#34;, &#34;type&#34;: &#34;not allowed&#34;}, {&#34;id&#34;: &#34;345&#34;, &#34;type&#34;: &#34;maybe&#34;}]" resultVariable="documents" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=[&#34;allowed&#34;, &#34;maybe&#34;]" target="allowedTypes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rp959q</bpmn:incoming>
+      <bpmn:outgoing>Flow_01z8ndt</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_01z8ndt" sourceRef="Activity_14dcv4a" targetRef="Activity_1vs0220" />
+    <bpmn:serviceTask id="Activity_1vs0220" name="Do it for all allowed documents">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="documentHandling" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01z8ndt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0k3on8f</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:extensionElements>
+          <zeebe:loopCharacteristics inputCollection="=documents[item.type not in allowedTypes]" inputElement="document" />
+        </bpmn:extensionElements>
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1xypme7" name="Dynamic multi instance example done">
+      <bpmn:incoming>Flow_0k3on8f</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0k3on8f" sourceRef="Activity_1vs0220" targetRef="Event_1xypme7" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ComplexDynamicMultiinstance">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="145" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00fv1v9_di" bpmnElement="Activity_14dcv4a">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qcno7p_di" bpmnElement="Activity_1vs0220">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xypme7_di" bpmnElement="Event_1xypme7">
+        <dc:Bounds x="592" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="567" y="145" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0rp959q_di" bpmnElement="Flow_0rp959q">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01z8ndt_di" bpmnElement="Flow_01z8ndt">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="430" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0k3on8f_di" bpmnElement="Flow_0k3on8f">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="592" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
