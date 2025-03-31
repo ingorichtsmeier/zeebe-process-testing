@@ -25,6 +25,12 @@
       <version>${zeebe.version}</version>
       <scope>test</scope>
     </dependency>
-
+    
+    <dependency>
+      <groupId>org.camunda.bpm.model</groupId>
+      <artifactId>camunda-xml-model</artifactId>
+      <version>7.22.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -65,7 +65,7 @@ public class MultiInstanceProcessTest {
   @Test
   public void testComplexMultiInstance() {
     DeploymentEvent deployment = client.newDeployResourceCommand().addResourceFromClasspath("complex-dynamic-multiinstance.bpmn").send().join();
-    assertThat(deployment).containsProcessesByBpmnProcessId("ComplexMultiinstance");
+    assertThat(deployment).containsProcessesByBpmnProcessId("ComplexDynamicMultiinstance");
     
   }
 
